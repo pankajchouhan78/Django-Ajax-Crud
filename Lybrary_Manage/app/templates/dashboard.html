@@ -1,0 +1,189 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Library</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </head>
+
+  <body>
+    {% csrf_token %}
+    <div class="container m-5">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Welcome {{user.username}}</a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="#">Home</a>
+              </li>
+              
+            </ul>
+            <form class="d-flex" role="search">
+              <input
+                class="form-control me-2"
+                id="search"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+              />
+              
+            </form>
+
+            {% if 'add_book' in permision_list %}
+                <button
+                  class="btn btn-outline-success m-2"
+                  id="create_button"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  Book Create
+                </button>
+                {% endif %}
+          </div>
+        </div>
+      </nav>
+
+      
+
+      {% comment %}
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for book in Books %}
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ book.title }}</td>
+            <td>{{ book.description|truncatechars:100 }}</td>
+            <td>
+              {% if 'change_book' in permision_list %}
+              <button
+                class="btn btn-primary update_button"
+                data-bookid="{{book.id}}"
+              >
+                Update
+              </button>
+              {% endif %} {% if 'delete_book' in permision_list %}
+              <button
+                class="btn btn-danger delete_button"
+                data-bookid="{{book.id}}"
+              >
+                Delete
+              </button>
+              {% endif %}
+            </td>
+          </tr>
+          <br />
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endcomment %}
+
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Title</th>
+            <th scope="col">Description</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="books-tbody">
+          <!-- Data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="exampleModal"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">
+              Books create
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="myForm">
+              <h3 id="error_message" class="text-danger"></h3>
+              <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" required />
+                <input
+                  type="hidden"
+                  class="form-control"
+                  id="update_id"
+                  value=""
+                />
+              </div>
+              <div class="mb-3">
+                <label for="desc" class="form-label">Descriptsion</label>
+                <textarea class="form-control" id="desc" rows="3"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+            <button id="save_button" type="button" class="btn btn-primary">
+              Save
+            </button>
+            <button
+              id="update_save_button"
+              type="button"
+              class="btn btn-primary"
+            >
+              update
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'js/ajax.js' %}"></script>
+  </body>
+</html>
