@@ -1,0 +1,13 @@
+
+version: '3'
+
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py runserver 0.0.0.0:8080"
+    container_name: docker_app
+    volumes:
+      - .:/docker_app
+
+    ports:
+      - "8080:8080"
